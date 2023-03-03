@@ -10,7 +10,7 @@ const Stack = createStackNavigator()
 
 export default function Navigate() {
     const mainOptions = {
-
+        headerShown: false,
     }
     const characterOptions = {
 
