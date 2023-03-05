@@ -37,14 +37,14 @@ export default function Character({ route, navigation }) {
         style={[styles.elivatedButton]}
         onPress={() => sheetRef2.current.snapTo(1)}
       >
-        <Text style={{ textAlign: "center", color:"white" }}>C</Text>
+        <Text style={{ textAlign: "center", color:"#303030" }}>C</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
         style={[styles.elivatedButton]}
         onPress={() => sheetRef.current.snapTo(1)}
       >
-        <Text style={{ textAlign: "center", color:"white"  }}>+</Text>
+        <Text style={{ textAlign: "center", color:"#303030"  }}>+</Text>
       </TouchableOpacity>
     </View>
     <View style={styles.characterContainer}>

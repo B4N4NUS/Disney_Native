@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, Image, Button } from "react-native";
+import { View, Text, Image, Button, TextInput } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import styles from "../misc/Styles";
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
@@ -12,8 +12,10 @@ export default function GroupPart({ index, groups, currentChar, setUpdate, updat
     const [canAdd, setCanAdd] = useState(true)
     const [canDelete, setCanDelete] = useState(false)
     const [showChars, setShowChars] = useState(false)
+    const [text, setText] = useState("")
 
     useEffect(() => {
+        setText(groups.data[index].key)
         if (groups.data[index].data.find(item => item === currentChar) || currentChar === null) {
             setCanAdd(false)
         } else {
@@ -38,6 +40,13 @@ export default function GroupPart({ index, groups, currentChar, setUpdate, updat
         alert("group deleted")
     }
 
+    const updateGroupName = (name) => {
+        groups.data[index].key = name
+        storeCloudData(groups)
+        setUpdate(!update)
+        alert("group name changed")
+    }
+
     return <>
         <View style={styles.containerRow}>
             <TouchableOpacity style={styles.addButton}
@@ -46,9 +55,20 @@ export default function GroupPart({ index, groups, currentChar, setUpdate, updat
                 }}>
                 <Text style={styles.addButtonText}>{showChars ? "^" : "⌄"}</Text>
             </TouchableOpacity>
-            <Text style={{ flex: 1, color: "white", fontSize: 18, }}>{groups.data[index].key}</Text>
 
 
+            {(currentChar === null) ?
+                <TextInput
+                    style={{ flex: 1, color: "white", fontSize: 18, }}
+                    value={text}
+                    onSubmitEditing={() => {
+                        updateGroupName(text)
+                    }}
+                    onChangeText={(ntext) => {setText(ntext)}}/> :
+                <Text
+                    style={{ flex: 1, color: "white", fontSize: 18, }}>
+                    {groups.data[index].key}
+                </Text>}
             {canAdd && <TouchableOpacity style={styles.addButton}
                 onPress={() => {
                     setCanAdd(false)

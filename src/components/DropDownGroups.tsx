@@ -43,7 +43,11 @@ export default function DropDownGroups({ sheetRef, character }: { sheetRef: any,
     const renderContent = () => (
         <View style={[styles.dropdownBody]}>
             <View style={styles.containerRow}>
-                <TextInput style={[styles.searchBar, { flex: 1 }]} placeholder="Search..." value={search} onChangeText={(text) => {
+                <TextInput style={[styles.searchBar, { flex: 1, borderColor: "white" }]} 
+                placeholder="Search..." 
+                value={search}
+                placeholderTextColor="white" 
+                onChangeText={(text) => {
                     setSearch(text)
                     setUpdate(!update)
                 }}></TextInput>

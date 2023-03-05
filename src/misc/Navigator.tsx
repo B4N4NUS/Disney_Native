@@ -18,7 +18,7 @@ export default function Navigate() {
             backgroundColor: '#ff6600',
             height: 50 + (Platform.OS === "android" ? StatusBar.currentHeight : 0),
         },
-        headerTintColor: '#fff',
+        headerTintColor: '#303030',
     }
     return (
         <NavigationContainer>

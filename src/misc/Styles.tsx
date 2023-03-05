@@ -38,12 +38,14 @@ const styles = StyleSheet.create({
   },
   searchBar: {
     borderWidth:1,
-    borderRadius: 3,
-    marginLeft: 30,
-    marginRight: 30,
+    borderRadius: 15,
+    marginHorizontal:20,
     marginTop: 10,
     marginBottom: 10,
-    padding: 3,
+    paddingHorizontal: 10,
+    paddingVertical: 0,
+    // color: "white",
+    // borderColor: "white"
   },
   textInput: {
     margin: 1,
@@ -63,7 +65,7 @@ const styles = StyleSheet.create({
     // borderBottomLeftRadius: 20,
     // borderBottomRightRadius: 20,
     borderRadius: 10,
-    // width: Dimensions.get("window").width * 2 / 7,
+    minWidth: Dimensions.get("window").width * 2 / 7,
     aspectRatio: "3/4",
     flex: 1,
     alignItems:"center"
@@ -84,6 +86,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#3e3e3e",
     borderRadius: 10,
     width: Dimensions.get("window").width / 3,
+    // aspectRatio: "3/5",
     flex: 1,
   },
   singleImage: {
@@ -128,7 +131,8 @@ const styles = StyleSheet.create({
     minWidth:40,
     alignContent:"center",
     justifyContent:"center",
-    backgroundColor:"#ff6600"
+    backgroundColor:"#ff6600",
+    color: "#303030"
 
   },
   elivation: {

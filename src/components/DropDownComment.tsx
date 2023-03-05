@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import * as React from 'react';
 import { IUserListArray } from "../logic/Interfaces/IUserListArray";
 import { auth, getCloudData, getCloudDataComments, storeCloudDataComments } from "../misc/Firebase";
-import { Button, ScrollView, View, Text, TextInput } from "react-native";
+import { Button, ScrollView, View, Text, TextInput, Dimensions } from "react-native";
 import styles from "../misc/Styles";
 import GroupPart from "./GroupPart";
 import Animated from 'react-native-reanimated';
@@ -36,25 +36,35 @@ export default function DropDownComment({ sheetRef, characterId, setComment }: {
 
 
     const renderContent = () => (
-        <View style={[styles.dropdownBody]}>
-            <TextInput value={newComment}
-                onChangeText={(text) => { setNewComment(text) }}
-                placeholder="Your comment here..." />
-            <Button title="Save"
-                onPress={() => {
-                    if (allComments) {
-                        if (allComments.data.find(item => item.id === characterId)) {
-                            allComments.data[allComments.data.findIndex(item => item.id === characterId)].comment = newComment
-                        } else {
-                            allComments.data.push({
-                                id: characterId,
-                                comment: newComment
-                            })
+        <View style={[styles.dropdownBody, { flexDirection: "column", display: "flex", alignContent: "center" }]}>
+            <View style={{ backgroundColor: "red", justifyContent: "center", alignItems:"center" }}>
+                <ScrollView>
+                    <TextInput value={newComment}
+                        onChangeText={(text) => { setNewComment(text) }}
+                        placeholder="Your comment here..." 
+                        multiline={true}/>
+                </ScrollView>
+                <TouchableOpacity
+                    style={{ flex: 0, backgroundColor: "#ff6600", width: Dimensions.get("window").width / 2, margin: 10, padding: 10 }}
+                    onPress={() => {
+                        if (allComments) {
+                            if (allComments.data.find(item => item.id === characterId)) {
+                                allComments.data[allComments.data.findIndex(item => item.id === characterId)].comment = newComment
+                            } else {
+                                allComments.data.push({
+                                    id: characterId,
+                                    comment: newComment
+                                })
+                            }
+                            setComment(newComment)
+                            storeCloudDataComments(allComments).then(() => alert("saved")).then(() => update())
                         }
-                        setComment(newComment)
-                        storeCloudDataComments(allComments).then(() => alert("saved")).then(() => update())
-                    }
-                }}></Button>
+                    }}>
+                    <Text style={{ color: "white", textAlign: "center", borderRadius: 30, }}>
+                        Save
+                    </Text>
+                </TouchableOpacity>
+            </View>
         </View>
     );
 
