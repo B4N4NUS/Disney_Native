@@ -3,6 +3,8 @@ import { initializeApp } from "firebase/app";
 import firebase from 'firebase/compat/app'
 import {getFirestore, doc, setDoc, getDoc} from "firebase/firestore"
 import 'firebase/compat/auth'
+import { IUserListArray } from "../logic/Interfaces/IUserListArray";
+import { ICommentArray } from "../logic/Interfaces/ICommentArray";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -26,4 +28,57 @@ if (firebase.apps.length === 0) {
 const auth = firebase.auth()
 const db = getFirestore(app)
 
-export {auth, app, db, getFirestore, doc, setDoc, getDoc}
+
+const getCloudData = async () => {
+  try {
+      const docRef = doc(db, "users", auth.currentUser.email)
+      const docSnap = await getDoc(docRef)
+      if (docSnap.exists()) {
+          return docSnap.data().data
+      } else {
+          console.log("No users")
+          return {data:[]}
+      }
+  } catch (e) {
+      alert(e.message)
+  }
+}
+
+const storeCloudData = async (value: IUserListArray) => {
+  try {
+      const docRef = await setDoc(doc(db, "users", auth.currentUser.email), {
+          data: value
+      })
+  } catch (e) {
+      alert(e.message)
+  }
+}
+
+const getCloudDataComments = async () => {
+    try {
+        const docRef = doc(db, "comments", auth.currentUser.email)
+        const docSnap = await getDoc(docRef)
+        if (docSnap.exists()) {
+            return docSnap.data().data
+        } else {
+            console.log("No comments")
+            return {data:[]}
+        }
+    } catch (e) {
+        alert(e.message)
+    }
+  }
+  
+  const storeCloudDataComments = async (value: ICommentArray) => {
+    try {
+        const docRef = await setDoc(doc(db, "comments", auth.currentUser.email), {
+            data: value
+        })
+    } catch (e) {
+        alert(e.message)
+    }
+  }
+
+
+
+export {auth, app, db, getFirestore, doc, setDoc, getDoc, getCloudData, storeCloudData, getCloudDataComments, storeCloudDataComments}

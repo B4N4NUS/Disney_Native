@@ -1,4 +1,4 @@
 export interface ICustomList {
-    data: number[],
+    data: string[],
     key: string
 }
