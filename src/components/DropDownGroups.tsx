@@ -2,17 +2,20 @@ import { useEffect, useState } from "react";
 import * as React from 'react';
 import { IUserListArray } from "../logic/Interfaces/IUserListArray";
 import { auth, getCloudData, storeCloudData } from "../misc/Firebase";
-import { Button, ScrollView, View, Text, TextInput, TouchableOpacity } from "react-native";
+import { Button, View, Text, TouchableOpacity, Dimensions, KeyboardAvoidingView } from "react-native";
 import styles from "../misc/Styles";
 import GroupPart from "./GroupPart";
 import Animated from 'react-native-reanimated';
 import BottomSheet from 'reanimated-bottom-sheet';
+import { ScrollView, TextInput } from "react-native-gesture-handler";
+import { useToast } from "react-native-toast-notifications";
 
 export default function DropDownGroups({ sheetRef, character }: { sheetRef: any, character: string }) {
     const [groups, setGroups] = useState<IUserListArray | null>(null)
     const [visibleGroups, setVisibleGroups] = useState<IUserListArray | null>(null)
     const [search, setSearch] = useState("")
     const [update, setUpdate] = useState(false)
+    const toast = useToast()
 
     useEffect(() => {
         getCloudData().then((responce) => {
@@ -28,56 +31,66 @@ export default function DropDownGroups({ sheetRef, character }: { sheetRef: any,
                 console.log(newGroups)
             } else {
                 setVisibleGroups(responce)
-                console.log("Changed visible groups to: " )
+                console.log("Changed visible groups to: ")
                 console.log(responce)
             }
             setGroups(responce)
             console.log("Got data from server")
             console.log(responce)
-        }).catch((e) => alert(e.message))
+        }).catch((e) => toast.show("Can't Load Groups", {
+            type: "normal",
+            placement: "top",
+            duration: 2000,
+            animationType: "slide-in",
+        }))
     }, [auth.currentUser.email, update])
 
 
 
 
     const renderContent = () => (
-        <View style={[styles.dropdownBody]}>
-            <View style={styles.containerRow}>
-                <TextInput style={[styles.searchBar, { flex: 1, borderColor: "white" }]} 
-                placeholder="Search..." 
-                value={search}
-                placeholderTextColor="white" 
-                onChangeText={(text) => {
-                    setSearch(text)
-                    setUpdate(!update)
-                }}></TextInput>
-                <TouchableOpacity style={styles.addButton}
-                    onPress={() => {
-                        if (search === "") {
-                            alert("Can't name groups <blank>")
-                            return
-                        }
-                        if (groups.data.find(item => item.key === search)) {
-                            alert("Group " + search + " already exists")
-                            return
-                        }
-                        groups.data.push({ data: [], key: search })
-                        storeCloudData(groups)
-                        setGroups(groups)
-                        setUpdate(!update)
-                    }}>
-                    <Text style={styles.addButtonText}>+</Text>
-                </TouchableOpacity>
-            </View>
-            <ScrollView>
+            <ScrollView style={[styles.dropdownBody]}>
+                <View style={styles.containerRow}>
+                    <TextInput style={[styles.searchBar, { color: "white", flex: 1, borderColor: "white", }]}
+                        placeholder="Search..."
+                        value={search}
+                        placeholderTextColor="white"
+                        onChangeText={(text) => {
+                            setSearch(text)
+                            setUpdate(!update)
+                        }}></TextInput>
+                    <TouchableOpacity style={styles.addButton}
+                        onPress={() => {
+                            if (search === "") {
+                                toast.show("Can't name group <blank>", {
+                                    type: "normal",
+                                    placement: "top",
+                                    duration: 2000,
+                                    animationType: "slide-in",
+                                })
+                                return
+                            }
+                            if (groups.data.find(item => item.key === search)) {
+                                toast.show("Group " + search + " already exists", {
+                                    type: "normal",
+                                    placement: "top",
+                                    duration: 2000,
+                                    animationType: "slide-in",
+                                })
+                                return
+                            }
+                            groups.data.push({ data: [], key: search })
+                            storeCloudData(groups)
+                            setGroups(groups)
+                            setUpdate(!update)
+                        }}>
+                        <Text style={styles.addButtonText}>+</Text>
+                    </TouchableOpacity>
+                </View>
                 {groups && visibleGroups?.data?.map((c, i) =>
                     <GroupPart index={i} groups={groups} currentChar={character} setUpdate={setUpdate} update={update} key={i}></GroupPart>
                 )}
-                {/* {visibleGroups && visibleGroups.data && visibleGroups?.data?.map((c, i) =>
-                    <GroupPart index={groups.data.findIndex(item => item.key === visibleGroups.data[i].key)} groups={groups} currentChar={character} key={i}></GroupPart>
-                )} */}
             </ScrollView>
-        </View>
     );
 
     const renderHeader = () => (
@@ -92,7 +105,7 @@ export default function DropDownGroups({ sheetRef, character }: { sheetRef: any,
     return <>
         <BottomSheet
             ref={sheetRef}
-            snapPoints={[0, 500]}
+            snapPoints={[0, Dimensions.get("window").height * 0.7]}
             renderContent={renderContent}
             renderHeader={renderHeader}
             initialSnap={0}

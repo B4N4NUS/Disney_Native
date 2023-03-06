@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useMemo, useState } from "react";
-import { View, Text, TextInput, FlatList, TouchableOpacity, Image, SafeAreaView, Platform, StatusBar } from "react-native";
+import { View, Text, TextInput, FlatList, TouchableOpacity, Image, SafeAreaView, Platform, StatusBar, Dimensions } from "react-native";
 import { ICharacter } from "../logic/Interfaces/ICharacter";
 import { ICharacterArray } from "../logic/Interfaces/ICharacterArray";
 import { IMainOptions } from "../logic/Interfaces/IMainOptions";
@@ -10,7 +10,6 @@ const SEARCH_URL = "https://api.disneyapi.dev/character?name="
 const ALL_CHARACTERS_URL = "https://api.disneyapi.dev/characters?page=1"
 
 export default function Main({ route, navigation }) {
-    // const navigation = useNavigation()
     const userLists = []
     const [characters, setCharacters] = useState<ICharacterArray | null>(null)
     const [searchReq, setSearchReq] = useState("")
@@ -25,7 +24,6 @@ export default function Main({ route, navigation }) {
         console.log(options.login)
         fetch(searchReq === "" ? ALL_CHARACTERS_URL : SEARCH_URL + searchReq).then((responce) => responce.json()).then((json) => {
             parseCharacters(json)
-            // console.log(json)
         })
     }
 
@@ -55,6 +53,14 @@ export default function Main({ route, navigation }) {
     }
 
     return <View style={{ backgroundColor: "#303030", height: "100%", }}>
+        <View style={[styles.elivation]}>
+            <TouchableOpacity
+                style={[styles.elivatedButton]}
+                onPress={() => navigation.navigate("Groups")}
+            >
+                <Text style={{ textAlign: "center", color: "#303030" }}>+</Text>
+            </TouchableOpacity>
+        </View>
 
         <SafeAreaView style={styles.androidSafeArea}>
 
@@ -64,7 +70,7 @@ export default function Main({ route, navigation }) {
                     onChangeText={(text) => {
                         setSearchReq(text)
                     }}
-                    onSubmitEditing={()=> {
+                    onSubmitEditing={() => {
                         search()
                     }}
                     placeholder="Search..."
@@ -72,14 +78,7 @@ export default function Main({ route, navigation }) {
                 />
             </View>
 
-            <View style={[styles.elivation, { top: 60 + (Platform.OS === "android" ? StatusBar.currentHeight : 0) }]}>
-                <TouchableOpacity
-                    style={[styles.elivatedButton]}
-                    onPress={() => navigation.navigate("Groups")}
-                >
-                    <Text style={{ textAlign: "center", color: "#303030" }}>+</Text>
-                </TouchableOpacity>
-            </View>
+
 
             <FlatList
                 data={characters ? characters.data : []}
@@ -98,7 +97,7 @@ export default function Main({ route, navigation }) {
                         style={styles.listItem}
                     >
                         <Text numberOfLines={1} style={styles.listText}>{item.name}</Text>
-                        <Image style={styles.listImage} source={item.imageUrl ? { uri: item.imageUrl } : {uri: "https://static.wikia.nocookie.net/disney/images/7/7c/Noimage.png"}} />
+                        <Image style={styles.listImage} source={item.imageUrl ? { uri: item.imageUrl } : { uri: "https://static.wikia.nocookie.net/disney/images/7/7c/Noimage.png" }} />
                     </TouchableOpacity>
                 )}
             />

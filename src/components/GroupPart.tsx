@@ -7,12 +7,14 @@ import { ICharacterArray } from "../logic/Interfaces/ICharacterArray";
 import { ICustomList } from "../logic/Interfaces/ICustomList";
 import { IUserListArray } from "../logic/Interfaces/IUserListArray";
 import { storeCloudData } from "../misc/Firebase";
+import {useToast} from "react-native-toast-notifications";
 
 export default function GroupPart({ index, groups, currentChar, setUpdate, update }: { index: number, groups: IUserListArray, currentChar: string | null, setUpdate: React.Dispatch<React.SetStateAction<boolean>>, update: boolean }) {
     const [canAdd, setCanAdd] = useState(true)
     const [canDelete, setCanDelete] = useState(false)
     const [showChars, setShowChars] = useState(false)
     const [text, setText] = useState("")
+    const toast = useToast()
 
     useEffect(() => {
         setText(groups.data[index].key)
@@ -27,24 +29,41 @@ export default function GroupPart({ index, groups, currentChar, setUpdate, updat
     }, [groups, currentChar, index])
 
     const deleteCharacter = (i: number) => {
+        toast.show(groups.data[index].data[i] + " was deleted from " + groups.data[index].key, {
+            type: "normal",
+            placement: "top",
+            duration: 2000,
+            animationType: "slide-in",
+          })
+
         groups.data[index].data.splice(i, 1)
         storeCloudData(groups)
         setUpdate(!update)
-        alert("character deleted")
     }
 
     const deleteGroup = () => {
+        toast.show(groups.data[index].key+ " was deleted", {
+            type: "normal",
+            placement: "top",
+            duration: 2000,
+            animationType: "slide-in",
+          })
+
         groups.data.splice(index, 1)
         storeCloudData(groups)
         setUpdate(!update)
-        alert("group deleted")
     }
 
     const updateGroupName = (name) => {
+        toast.show("Changed "+groups.data[index].key + "'s name to " + name, {
+            type: "normal",
+            placement: "top",
+            duration: 2000,
+            animationType: "slide-in",
+          })
         groups.data[index].key = name
         storeCloudData(groups)
         setUpdate(!update)
-        alert("group name changed")
     }
 
     return <>

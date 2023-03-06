@@ -10,13 +10,14 @@ import { IUserListArray } from "../logic/Interfaces/IUserListArray";
 import { Value } from "react-native-reanimated";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { TouchableOpacity } from "react-native-gesture-handler";
-// import { UserListsContext } from "../../App";
+import { useToast } from "react-native-toast-notifications";
 
 export default function Login() {
     const navigation = useNavigation()
     const [saveLogin, setSaveLogin] = useState(false)
     const [login, setLogin] = useState("")
     const [pass, setPass] = useState("")
+    const toast = useToast()
 
     let mainOptions: IMainOptions = {
         login: "",
@@ -29,11 +30,15 @@ export default function Login() {
                 setLogin(response.login)
                 setPass(response.pass)
                 setSaveLogin(true)
-                // alert(response.login + " " + response.pass)
                 handleLogin({ login: response.login, pass: response.pass })
 
             }
-        })
+        }).catch(() => toast.show("Can't load local data", {
+            type: "normal",
+            placement: "top",
+            duration: 2000,
+            animationType: "slide-in",
+          }))
         // TODO SAVE LOAD
     }, [])
 
@@ -70,7 +75,12 @@ export default function Login() {
             }
 
             navigation.navigate("Main", { options: mainOptions, })
-        }).catch(error => alert(error.message + "\n" + mainOptions.login + " " + mainOptions.pass))
+        }).catch(error => toast.show("Wrong email or password", {
+            type: "normal",
+            placement: "top",
+            duration: 2000,
+            animationType: "slide-in",
+          }))
     }
     const handleSignUp = () => {
         auth.createUserWithEmailAndPassword(login, pass).then(userCredentials => {
@@ -79,7 +89,12 @@ export default function Login() {
             mainOptions.login = login
             mainOptions.pass = pass
             navigation.navigate("Main", { options: mainOptions, })
-        }).catch(error => alert(error.message))
+        }).catch(error => toast.show("Network error", {
+            type: "normal",
+            placement: "top",
+            duration: 2000,
+            animationType: "slide-in",
+          }))
     }
 
     return <View style={styles.containerCol}>
