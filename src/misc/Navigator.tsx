@@ -1,6 +1,5 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { TransitionSpec } from "@react-navigation/stack/lib/typescript/src/types";
 import * as React from 'react';
 import { Platform, StatusBar } from "react-native";
 import Character from "../screens/Character";
@@ -12,14 +11,15 @@ const Stack = createStackNavigator()
 
 const forFade = ({ current }) => ({
     cardStyle: {
-      opacity: current.progress,
+        opacity: current.progress,
     },
-  });
+});
 
+// Обертка над навигатором
 export default function Navigate() {
     const mainOptions = {
         headerShown: false,
-        cardStyleInterpolator: forFade 
+        cardStyleInterpolator: forFade
     }
     const characterOptions = {
         headerStyle: {
@@ -27,18 +27,17 @@ export default function Navigate() {
             height: 50 + (Platform.OS === "android" ? StatusBar.currentHeight : 0),
         },
         headerTintColor: '#303030',
-        cardStyleInterpolator: forFade 
+        cardStyleInterpolator: forFade
     }
     return (
         <NavigationContainer>
             <Stack.Navigator screenOptions={{
                 cardOverlayEnabled: true,
                 // animationEnabled: false,
-
             }}>
                 <Stack.Screen name="Login" component={Login} options={{
                     headerShown: false,
-                    cardStyleInterpolator: forFade 
+                    cardStyleInterpolator: forFade
                 }} />
                 <Stack.Screen name="Main" component={Main} options={mainOptions} />
                 <Stack.Screen name="Character" component={Character} options={characterOptions} />

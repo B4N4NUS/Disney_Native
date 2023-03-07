@@ -1,13 +1,11 @@
 import { useNavigation } from "@react-navigation/native";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import React from "react";
-import { Button, StyleSheet, SafeAreaView, Switch, Text, TextInput, View, Dimensions, } from 'react-native';
+import { Switch, Text, TextInput, View} from 'react-native';
 import styles from "../misc/Styles";
 import { IMainOptions } from "../logic/Interfaces/IMainOptions";
-import { auth, db, doc, getDoc, setDoc, storeCloudDataComments } from "../misc/Firebase";
-import { IUserListArray } from "../logic/Interfaces/IUserListArray";
+import { auth} from "../misc/Firebase";
 
-import { Value } from "react-native-reanimated";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useToast } from "react-native-toast-notifications";
@@ -24,6 +22,7 @@ export default function Login() {
         pass: "",
     }
 
+    // Высасывание из локального хранилища логина и пароля
     useEffect(() => {
         getData().then(response => {
             if (response) {
@@ -39,9 +38,9 @@ export default function Login() {
             duration: 2000,
             animationType: "slide-in",
           }))
-        // TODO SAVE LOAD
     }, [])
 
+    // Обращение к асинкстораджу
     const getData = async () => {
         try {
             const jsonValue = await AsyncStorage.getItem("@storage_key")
@@ -51,6 +50,7 @@ export default function Login() {
         }
     }
 
+    // Запись в асинксторадж
     const storeData = async (value) => {
         try {
             const jsonValue = JSON.stringify(value)
@@ -60,7 +60,7 @@ export default function Login() {
         }
     }
 
-
+    // Обработка входа в аккаунт под введенными данными
     const handleLogin = (mainOptions: IMainOptions) => {
         auth.signInWithEmailAndPassword(mainOptions.login, mainOptions.pass).then(userCredentials => {
             const user = userCredentials.user
@@ -82,12 +82,12 @@ export default function Login() {
             animationType: "slide-in",
           }))
     }
+
+    // Регистрация нового аккаунта по введенным данным
     const handleSignUp = () => {
         auth.createUserWithEmailAndPassword(login, pass).then(userCredentials => {
             const user = userCredentials.user
             console.log("Registered with: " + user.email)
-            mainOptions.login = login
-            mainOptions.pass = pass
             navigation.navigate("Main", { options: mainOptions, })
         }).catch(error => toast.show("Network error", {
             type: "normal",
@@ -121,7 +121,6 @@ export default function Login() {
             <TouchableOpacity
                 onPress={() => {
                     handleLogin({ login: login, pass: pass })
-                    // navigation.navigate("Main", {options: mainOptions,})
                 }}
                 style={[styles.loginButton, { backgroundColor: "#ff6600" }]}
             >
@@ -130,7 +129,6 @@ export default function Login() {
             <TouchableOpacity
                 onPress={() => {
                     handleSignUp()
-                    // navigation.navigate("Main", {options: mainOptions},)
                 }}
                 style={[styles.loginButton, { backgroundColor: "white" }]}
             >

@@ -5,6 +5,7 @@ import { IUserListArray } from "../logic/Interfaces/IUserListArray";
 import { getCloudData, auth } from "../misc/Firebase";
 import { useToast } from "react-native-toast-notifications";
 
+// Окно с списком групп, где можно удалять и переименовывать все и вся
 export default function Groups() {
     const [groups, setGroups] = useState<IUserListArray>()
     const [update, setUpdate] = useState(false)

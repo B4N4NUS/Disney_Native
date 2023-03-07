@@ -2,14 +2,14 @@ import { useEffect, useState } from "react";
 import * as React from 'react';
 import { IUserListArray } from "../logic/Interfaces/IUserListArray";
 import { auth, getCloudData, storeCloudData } from "../misc/Firebase";
-import { Button, View, Text, TouchableOpacity, Dimensions, KeyboardAvoidingView } from "react-native";
+import { View, Text, TouchableOpacity, Dimensions} from "react-native";
 import styles from "../misc/Styles";
 import GroupPart from "./GroupPart";
-import Animated from 'react-native-reanimated';
 import BottomSheet from 'reanimated-bottom-sheet';
 import { ScrollView, TextInput } from "react-native-gesture-handler";
 import { useToast } from "react-native-toast-notifications";
 
+// Дропдаун со списком групп
 export default function DropDownGroups({ sheetRef, character }: { sheetRef: any, character: string }) {
     const [groups, setGroups] = useState<IUserListArray | null>(null)
     const [visibleGroups, setVisibleGroups] = useState<IUserListArray | null>(null)
@@ -18,6 +18,7 @@ export default function DropDownGroups({ sheetRef, character }: { sheetRef: any,
     const toast = useToast()
 
     useEffect(() => {
+        // Вытаскиваем данные по группам с сервера и парсим их на видимые для пользователя относительно содержимого строки поиска
         getCloudData().then((responce) => {
             if (search != "") {
                 let newGroups: IUserListArray = { data: [] }
@@ -46,8 +47,6 @@ export default function DropDownGroups({ sheetRef, character }: { sheetRef: any,
     }, [auth.currentUser.email, update])
 
 
-
-
     const renderContent = () => (
             <ScrollView style={[styles.dropdownBody]}>
                 <View style={styles.containerRow}>
@@ -61,6 +60,7 @@ export default function DropDownGroups({ sheetRef, character }: { sheetRef: any,
                         }}></TextInput>
                     <TouchableOpacity style={styles.addButton}
                         onPress={() => {
+                            // Обработка создание группы без названия
                             if (search === "") {
                                 toast.show("Can't name group <blank>", {
                                     type: "normal",
@@ -70,6 +70,7 @@ export default function DropDownGroups({ sheetRef, character }: { sheetRef: any,
                                 })
                                 return
                             }
+                            // Обработка создания группы с уже существующим в бд названием
                             if (groups.data.find(item => item.key === search)) {
                                 toast.show("Group " + search + " already exists", {
                                     type: "normal",
@@ -79,9 +80,11 @@ export default function DropDownGroups({ sheetRef, character }: { sheetRef: any,
                                 })
                                 return
                             }
+                            // Добавляем новую группу и отсылаем все на сервак
                             groups.data.push({ data: [], key: search })
                             storeCloudData(groups)
                             setGroups(groups)
+                            // Обновляем спикок групп с сервера
                             setUpdate(!update)
                         }}>
                         <Text style={styles.addButtonText}>+</Text>
@@ -100,7 +103,6 @@ export default function DropDownGroups({ sheetRef, character }: { sheetRef: any,
             </View>
         </View>
     )
-
 
     return <>
         <BottomSheet

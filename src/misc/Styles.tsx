@@ -1,5 +1,6 @@
 import { Dimensions, Platform, StatusBar, StyleSheet } from 'react-native';
 
+// Используемые стили
 const styles = StyleSheet.create({
   androidSafeArea: {
     paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,

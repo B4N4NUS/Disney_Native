@@ -9,13 +9,10 @@
     "web": "expo start --web"
   },
   "dependencies": {
-    "@ant-design/icons-react-native": "^2.3.2",
     "@babel/plugin-proposal-export-namespace-from": "^7.18.9",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@expo/webpack-config": "^18.0.1",
-    "@mui/icons-material": "^5.11.11",
-    "@mui/material": "^5.11.11",
     "@react-native-async-storage/async-storage": "^1.17.11",
     "@react-navigation/native": "^5.7.3",
     "@react-navigation/stack": "^5.9.0",

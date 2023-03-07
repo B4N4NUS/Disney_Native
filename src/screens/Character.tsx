@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, Image, Button, TouchableOpacity, Platform, StatusBar, Dimensions } from "react-native";
+import { View, Text, Image, TouchableOpacity } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import DropDownComment from "../components/DropDownComment";
 import DropDownGroups from "../components/DropDownGroups";
-import { getCloudData, getCloudDataComments } from "../misc/Firebase";
 import styles from "../misc/Styles";
 
 
-
+// Экран с персонажем
 export default function Character({ route, navigation }) {
-  const { options } = route.params
   const { character } = route.params
   const [comment, setComment] = useState<string | null>(null)
 
@@ -19,12 +17,9 @@ export default function Character({ route, navigation }) {
     });
   }, [character]);
 
-
-
-
+  // Две рефы, чтобы можно было передергивать дропдауны
   const sheetRef = React.useRef(null);
   const sheetRef2 = React.useRef(null);
-
 
   return <View style={styles.characterContainer}>
     <View style={[styles.elivation]}>

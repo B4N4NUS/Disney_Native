@@ -1,35 +1,28 @@
-import { useNavigation } from "@react-navigation/native";
-import React, { useEffect, useMemo, useState } from "react";
-import { View, Text, TextInput, FlatList, TouchableOpacity, Image, SafeAreaView, Platform, StatusBar, Dimensions } from "react-native";
-import { ICharacter } from "../logic/Interfaces/ICharacter";
+import React, { useEffect, useState } from "react";
+import { View, Text, TextInput, FlatList, TouchableOpacity, Image, SafeAreaView} from "react-native";
 import { ICharacterArray } from "../logic/Interfaces/ICharacterArray";
-import { IMainOptions } from "../logic/Interfaces/IMainOptions";
 import styles from "../misc/Styles";
 
 const SEARCH_URL = "https://api.disneyapi.dev/character?name="
 const ALL_CHARACTERS_URL = "https://api.disneyapi.dev/characters?page=1"
 
-export default function Main({ route, navigation }) {
-    const userLists = []
+// Главное окно приложения со списком всех персонажей
+export default function Main({navigation }) {
     const [characters, setCharacters] = useState<ICharacterArray | null>(null)
     const [searchReq, setSearchReq] = useState("")
-
-    const { options } = route.params
 
     useEffect(() => {
         search()
     }, [])
 
+    // Запрос к ресту для получения всех персонажей по введенному имени
     const search = () => {
-        console.log(options.login)
         fetch(searchReq === "" ? ALL_CHARACTERS_URL : SEARCH_URL + searchReq).then((responce) => responce.json()).then((json) => {
             parseCharacters(json)
         })
     }
 
-
-
-
+    // Парс json'чика в полноценный объект
     const parseCharacters = (json) => {
         console.log("parsing")
         let chars: ICharacterArray = { data: [] }
@@ -78,8 +71,6 @@ export default function Main({ route, navigation }) {
                 />
             </View>
 
-
-
             <FlatList
                 data={characters ? characters.data : []}
                 numColumns={3}
@@ -92,7 +83,7 @@ export default function Main({ route, navigation }) {
                 renderItem={({ item }) => (
                     <TouchableOpacity
                         onPress={() => {
-                            navigation.navigate("Character", { options: options, character: item })
+                            navigation.navigate("Character", {character: item })
                         }}
                         style={styles.listItem}
                     >
