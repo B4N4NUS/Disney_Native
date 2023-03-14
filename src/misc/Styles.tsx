@@ -23,7 +23,8 @@ const styles = StyleSheet.create({
   characterContainer: {
     display: "flex",
     alignItems: "center",
-    height: Dimensions.get('window').height,
+    // height: "100%",
+    // minHeight:"100%",
     flexDirection: "column",
     justifyContent: "center",
     backgroundColor: "#303030"
@@ -44,7 +45,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10,
     paddingVertical: 3,
-    paddingHorizontal:10,
+    paddingHorizontal: 10,
   },
   textInput: {
     margin: 1,
@@ -67,7 +68,7 @@ const styles = StyleSheet.create({
     // width: Dimensions.get("window").width * 2 / 7,
     aspectRatio: "3/4",
     flex: 1,
-    alignItems: "center"
+    alignItems: "center",
   },
   listText: {
     textAlign: "center",
@@ -84,16 +85,21 @@ const styles = StyleSheet.create({
     margin: 10,
     backgroundColor: "#3e3e3e",
     borderRadius: 10,
-    width: Dimensions.get("window").width / 3,
+    width: Dimensions.get("window").width / 3 - 20,
+    maxWidth: Dimensions.get("window").width / 3 - 20,
     flex: 1,
+    borderWidth: 1,
+    borderColor: '#ff6600'
   },
   singleImage: {
     width: Dimensions.get("window").width / 2,
     aspectRatio: "3/4",
     flex: 1,
     justifyContent: "center",
+    borderWidth: 3,
+    borderColor: '#ff6600',
     borderRadius: 10,
-    
+
   },
   singleImageContainer: {
     width: "100%",
@@ -130,8 +136,37 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 0,
     borderTopRightRadius: 0,
     minHeight: "100%",
-    zIndex:5,
+    zIndex: 5,
   },
+  wideInput: {
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "black",
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    marginVertical: 5,
+    marginHorizontal:20,
+    backgroundColor:"white"
+  },
+  textButton: {
+    borderRadius: 15,
+    backgroundColor: "black",
+    alignItems: "center",
+    padding: 15,
+    marginVertical: 5,
+  },
+  textButtonText: {
+    textAlign: "center",
+    color: "white",
+  },
+  settingsButton: {
+    borderRadius: 10,
+    paddingVertical: 15,
+    paddingHorizontal: 25,
+    marginVertical: 5,
+    marginHorizontal: 20,
+    backgroundColor: "#ff6600"
+},
   elivatedButton: {
     // position: "absolute",
     // zIndex:100,
@@ -152,7 +187,7 @@ const styles = StyleSheet.create({
     zIndex: 2,
     right: 0,
     marginBottom: 20,
-    top: Dimensions.get("window").height/2
+    top: Dimensions.get("window").height / 2
   },
   characterText: {
     textAlign: "center",
@@ -172,7 +207,7 @@ const styles = StyleSheet.create({
     margin: 2,
     aspectRatio: "1/1",
     justifyContent: "center",
-    marginRight: 10,
+    marginHorizontal: 10,
   },
   addButtonText: {
     textAlign: "center",

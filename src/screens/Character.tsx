@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, Image, TouchableOpacity } from "react-native";
+import { View, Text, Image, TouchableOpacity, Dimensions } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import DropDownComment from "../components/DropDownComment";
 import DropDownGroups from "../components/DropDownGroups";
@@ -22,7 +22,14 @@ export default function Character({ route, navigation }) {
   const sheetRef2 = React.useRef(null);
 
   return <View style={styles.characterContainer}>
-    <View style={[styles.elivation]}>
+
+    <View style={{
+      position: "absolute",
+      zIndex: 2,
+      left: 10,
+      // marginBottom: 20,
+      bottom: 10
+    }}>
       <TouchableOpacity
         style={[styles.elivatedButton]}
         onPress={() => {
@@ -34,7 +41,15 @@ export default function Character({ route, navigation }) {
       >
         <Text style={{ textAlign: "center", color: "#3e3e3e" }}>C</Text>
       </TouchableOpacity>
+    </View>
 
+    <View style={{
+      position: "absolute",
+      zIndex: 2,
+      right: 10,
+      // marginBottom: 20,
+      bottom: 10
+    }}>
       <TouchableOpacity
         style={[styles.elivatedButton]}
         onPress={() => {
@@ -47,8 +62,9 @@ export default function Character({ route, navigation }) {
         <Text style={{ textAlign: "center", color: "#3e3e3e" }}>+</Text>
       </TouchableOpacity>
     </View>
-
-    <DropDownGroups sheetRef={sheetRef} character={character.name} />
+    {/* <View style={{ maxHeight: Dimensions.get('window').height, minHeight: `100%` }}> */}
+      <DropDownGroups sheetRef={sheetRef} character={character.name} />
+    {/* </View> */}
     <DropDownComment sheetRef={sheetRef2} setComment={setComment} characterId={character._id} />
     <ScrollView style={{ width: "100%" }}>
 
@@ -58,7 +74,7 @@ export default function Character({ route, navigation }) {
           <Text style={[styles.characterText, { color: "#ff6600", fontSize: 18, }]}>{comment}</Text>
         </View>)}
       <View style={styles.singleImageContainer}>
-        <Image style={styles.singleImage} source={{ uri: character.imageUrl }} />
+        <Image style={styles.singleImage} source={character.imageUrl ? { uri: character.imageUrl } : { uri: "https://static.wikia.nocookie.net/disney/images/7/7c/Noimage.png" }} />
       </View>
       {character.films.length > 0 && (
         <View>
@@ -91,7 +107,7 @@ export default function Character({ route, navigation }) {
           <Text style={styles.characterText}>{character.enemies}</Text>
         </View>)}
 
-      <View style={{ height: 100 }}></View>
+      <View style={{ height: 150 }}></View>
     </ScrollView>
   </View>
 }

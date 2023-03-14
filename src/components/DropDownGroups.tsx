@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import * as React from 'react';
 import { IUserListArray } from "../logic/Interfaces/IUserListArray";
 import { auth, getCloudData, storeCloudData } from "../misc/Firebase";
-import { View, Text, TouchableOpacity, Dimensions } from "react-native";
+import { View, Text,  Dimensions } from "react-native";
 import styles from "../misc/Styles";
 import GroupPart from "./GroupPart";
 import BottomSheet from 'reanimated-bottom-sheet';
-import { FlatList, ScrollView, TextInput } from "react-native-gesture-handler";
+import { FlatList, ScrollView, TextInput, TouchableOpacity } from "react-native-gesture-handler";
 import { useToast } from "react-native-toast-notifications";
 
 // Дропдаун со списком групп
@@ -95,6 +95,7 @@ export default function DropDownGroups({ sheetRef, character }: { sheetRef: any,
                 </TouchableOpacity>
             </View>
             <FlatList
+                style={{maxHeight:Dimensions.get("window").height * 0.5-15}}
                 data={groups?.data}
                 renderItem={({ item, index }) => {
                     if (search === "" || item.key.toUpperCase().includes(search.toUpperCase().trim().replace(/\s/g, ""))) {

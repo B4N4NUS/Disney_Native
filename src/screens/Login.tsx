@@ -9,6 +9,7 @@ import { auth} from "../misc/Firebase";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useToast } from "react-native-toast-notifications";
+import { getData, storeData } from "../misc/AsyncStorage";
 
 export default function Login() {
     const navigation = useNavigation()
@@ -39,26 +40,6 @@ export default function Login() {
             animationType: "slide-in",
           }))
     }, [])
-
-    // Обращение к асинкстораджу
-    const getData = async () => {
-        try {
-            const jsonValue = await AsyncStorage.getItem("@storage_key")
-            return jsonValue != null ? JSON.parse(jsonValue) : null
-        } catch (e) {
-            console.log(e)
-        }
-    }
-
-    // Запись в асинксторадж
-    const storeData = async (value) => {
-        try {
-            const jsonValue = JSON.stringify(value)
-            await AsyncStorage.setItem("@storage_key", jsonValue)
-        } catch (e) {
-            console.log(e)
-        }
-    }
 
     // Обработка входа в аккаунт под введенными данными
     const handleLogin = (mainOptions: IMainOptions) => {

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TextInput } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { View, Text, TextInput, TouchableOpacity } from "react-native";
 import styles from "../misc/Styles";
 import { IUserListArray } from "../logic/Interfaces/IUserListArray";
 import { storeCloudData } from "../misc/Firebase";
