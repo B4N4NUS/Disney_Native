@@ -7,7 +7,7 @@ import { storeCloudData } from "../misc/Firebase";
 import { useToast } from "react-native-toast-notifications";
 
 // Компонент отрисовки одной группы. Используется в дропдауне групп и на странице редактирования групп
-export default function GroupPart({ index, groups, currentChar, setUpdate, update }: { index: number, groups: IUserListArray, currentChar: string | null, setUpdate: React.Dispatch<React.SetStateAction<boolean>>, update: boolean }) {
+export default function GroupPart({ index, groups, currentChar, setUpdate, update}: { index: number, groups: IUserListArray, currentChar: string | null, setUpdate: React.Dispatch<React.SetStateAction<boolean>>, update: boolean}) {
     const [canAdd, setCanAdd] = useState(true)
     const [canDelete, setCanDelete] = useState(false)
     const [showChars, setShowChars] = useState(false)
@@ -67,6 +67,7 @@ export default function GroupPart({ index, groups, currentChar, setUpdate, updat
         storeCloudData(groups)
         setUpdate(!update)
     }
+
 
     return <>
         <View style={styles.containerRow}>

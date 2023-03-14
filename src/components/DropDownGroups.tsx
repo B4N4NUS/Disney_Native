@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import * as React from 'react';
 import { IUserListArray } from "../logic/Interfaces/IUserListArray";
 import { auth, getCloudData, storeCloudData } from "../misc/Firebase";
-import { View, Text, TouchableOpacity, Dimensions} from "react-native";
+import { View, Text, TouchableOpacity, Dimensions } from "react-native";
 import styles from "../misc/Styles";
 import GroupPart from "./GroupPart";
 import BottomSheet from 'reanimated-bottom-sheet';
-import { ScrollView, TextInput } from "react-native-gesture-handler";
+import { FlatList, ScrollView, TextInput } from "react-native-gesture-handler";
 import { useToast } from "react-native-toast-notifications";
 
 // Дропдаун со списком групп
@@ -46,54 +46,65 @@ export default function DropDownGroups({ sheetRef, character }: { sheetRef: any,
         }))
     }, [auth.currentUser.email, update])
 
+    const saveGroup = (index: number) => {
+        groups.data[index].data.push(character)
+        storeCloudData(groups)
+    }
 
     const renderContent = () => (
-            <ScrollView style={[styles.dropdownBody]}>
-                <View style={styles.containerRow}>
-                    <TextInput style={[styles.searchBar, { color: "white", flex: 1, borderColor: "white", }]}
-                        placeholder="Search..."
-                        value={search}
-                        placeholderTextColor="white"
-                        onChangeText={(text) => {
-                            setSearch(text)
-                            setUpdate(!update)
-                        }}></TextInput>
-                    <TouchableOpacity style={styles.addButton}
-                        onPress={() => {
-                            // Обработка создание группы без названия
-                            if (search === "") {
-                                toast.show("Can't name group <blank>", {
-                                    type: "normal",
-                                    placement: "top",
-                                    duration: 2000,
-                                    animationType: "slide-in",
-                                })
-                                return
-                            }
-                            // Обработка создания группы с уже существующим в бд названием
-                            if (groups.data.find(item => item.key === search)) {
-                                toast.show("Group " + search + " already exists", {
-                                    type: "normal",
-                                    placement: "top",
-                                    duration: 2000,
-                                    animationType: "slide-in",
-                                })
-                                return
-                            }
-                            // Добавляем новую группу и отсылаем все на сервак
-                            groups.data.push({ data: [], key: search })
-                            storeCloudData(groups)
-                            setGroups(groups)
-                            // Обновляем спикок групп с сервера
-                            setUpdate(!update)
-                        }}>
-                        <Text style={styles.addButtonText}>+</Text>
-                    </TouchableOpacity>
-                </View>
-                {groups && visibleGroups?.data?.map((c, i) =>
-                    <GroupPart index={i} groups={groups} currentChar={character} setUpdate={setUpdate} update={update} key={i}></GroupPart>
-                )}
-            </ScrollView>
+        <View style={[styles.dropdownBody]}>
+            <View style={styles.containerRow}>
+                <TextInput style={[styles.searchBar, { color: "white", flex: 1, borderColor: "white", }]}
+                    placeholder="Search..."
+                    value={search}
+                    placeholderTextColor="white"
+                    onChangeText={(text) => {
+                        setSearch(text)
+                        setUpdate(!update)
+                    }}></TextInput>
+                <TouchableOpacity style={styles.addButton}
+                    onPress={() => {
+                        // Обработка создание группы без названия
+                        if (search === "") {
+                            toast.show("Can't name group <blank>", {
+                                type: "normal",
+                                placement: "top",
+                                duration: 2000,
+                                animationType: "slide-in",
+                            })
+                            return
+                        }
+                        // Обработка создания группы с уже существующим в бд названием
+                        if (groups.data.find(item => item.key === search)) {
+                            toast.show("Group " + search + " already exists", {
+                                type: "normal",
+                                placement: "top",
+                                duration: 2000,
+                                animationType: "slide-in",
+                            })
+                            return
+                        }
+                        // Добавляем новую группу и отсылаем все на сервак
+                        groups.data.push({ data: [], key: search })
+                        storeCloudData(groups)
+                        setGroups(groups)
+                        // Обновляем спикок групп с сервера
+                        setUpdate(!update)
+                    }}>
+                    <Text style={styles.addButtonText}>+</Text>
+                </TouchableOpacity>
+            </View>
+            <FlatList
+                data={groups?.data}
+                renderItem={({ item, index }) => {
+                    if (search === "" || item.key.toUpperCase().includes(search.toUpperCase().trim().replace(/\s/g, ""))) {
+                        return <GroupPart index={index} groups={groups} currentChar={character} setUpdate={setUpdate} update={update} key={index}></GroupPart>
+                    }
+                }
+                }
+                keyExtractor={(item) => item.key}
+            />
+        </View>
     );
 
     const renderHeader = () => (
