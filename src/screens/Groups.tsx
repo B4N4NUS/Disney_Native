@@ -24,7 +24,7 @@ export default function Groups() {
         }))
 }, [auth.currentUser.email, update])
 
-return <View style={{ backgroundColor: "#303030", height: "100%", }}>
+return <View style={{ backgroundColor: "#303030", height: "100%",paddingTop:10 }}>
     <ScrollView>
         {groups?.data.map((c, i) =>
             <GroupPart key={i} index={i} groups={groups} setUpdate={setUpdate} update={update} currentChar={null}></GroupPart>)}
