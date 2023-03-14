@@ -34,9 +34,9 @@ export default function Character({ route, navigation }) {
         style={[styles.elivatedButton]}
         onPress={() => {
           if (sheetRef.current) {
-            sheetRef.current.snapTo(0)
+            sheetRef.current.close()
           }
-          sheetRef2.current.snapTo(1)
+          sheetRef2.current.snapToIndex(0)
         }}
       >
         <Text style={{ textAlign: "center", color: "#3e3e3e" }}>C</Text>
@@ -54,18 +54,15 @@ export default function Character({ route, navigation }) {
         style={[styles.elivatedButton]}
         onPress={() => {
           if (sheetRef2.current) {
-            sheetRef2.current.snapTo(0)
+            sheetRef2.current.close()
           }
-          sheetRef.current.snapTo(1)
+          sheetRef.current.snapToIndex(0)
         }}
       >
         <Text style={{ textAlign: "center", color: "#3e3e3e" }}>+</Text>
       </TouchableOpacity>
     </View>
-    {/* <View style={{ maxHeight: Dimensions.get('window').height, minHeight: `100%` }}> */}
-      <DropDownGroups sheetRef={sheetRef} character={character.name} />
-    {/* </View> */}
-    <DropDownComment sheetRef={sheetRef2} setComment={setComment} characterId={character._id} />
+
     <ScrollView style={{ width: "100%" }}>
 
       {comment && (
@@ -109,5 +106,9 @@ export default function Character({ route, navigation }) {
 
       <View style={{ height: 150 }}></View>
     </ScrollView>
+
+    <DropDownGroups sheetRef={sheetRef} character={character.name} />
+
+    <DropDownComment sheetRef={sheetRef2} setComment={setComment} characterId={character._id} />
   </View>
 }

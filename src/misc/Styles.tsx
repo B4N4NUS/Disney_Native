@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
   characterContainer: {
     display: "flex",
     alignItems: "center",
-    // height: "100%",
+    height: "100%",
     // minHeight:"100%",
     flexDirection: "column",
     justifyContent: "center",
